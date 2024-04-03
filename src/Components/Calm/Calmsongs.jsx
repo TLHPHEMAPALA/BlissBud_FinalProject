@@ -2,15 +2,16 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../NavBar/nav';
 import Footer from '../Footer/Footer';
 
-const Meditation = () => {
+const Clam = () => {
   const [clamVideos] = useState([
-    'https://www.youtube.com/embed/hUzDQlk2UN0?si=oyetwYQGVKFiFhrz',
-    'https://www.youtube.com/embed/hUzDQlk2UN0?si=oyetwYQGVKFiFhrz',
-    'https://www.youtube.com/embed/hUzDQlk2UN0?si=oyetwYQGVKFiFhrz',
- 
+    'https://www.youtube.com/embed/eKbfUtLoQwE?si=AY2lqpf0geeCNTZs',
+    'https://www.youtube.com/embed/oPDoQhK72L0?si=WFu04XIlT7HB9LcN',
+    'https://www.youtube.com/embed/oPDoQhK72L0?si=WFu04XIlT7HB9LcN',
+    
   ]);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
 
+ 
   const playNextVideo = () => {
     setCurrentVideoIndex(prevIndex => (prevIndex + 1) % clamVideos.length);
   };
@@ -31,7 +32,7 @@ const Meditation = () => {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
                 className="rounded-lg"
-                onLoad={playNextVideo} 
+                onLoad={playNextVideo}
               ></iframe>
             </div>
           </div>
@@ -42,4 +43,4 @@ const Meditation = () => {
   );
 };
 
-export default Meditation;
+export default Clam;

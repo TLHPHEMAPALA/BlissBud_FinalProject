@@ -13,7 +13,7 @@ export default function Login() {
     const login = async () => {
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            navigate('/questionarie');
+            navigate('/Popup');
             Swal.fire({
                 title: "Login Successful",
                 icon: "success",

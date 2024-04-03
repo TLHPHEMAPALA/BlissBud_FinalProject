@@ -6,6 +6,9 @@ import Dashboard from './Components/Dashboard/Dashboard';
 import Music from './Components/Music/Music';
 import Meditation from './Components/Meditation/Meditation';
 import Contact from './Components/Contact/Contact';
+import Popup from './Components/Loginpage/Popup';
+import Videos from './Components/Videos/Videos';
+import Calmsongs from  './Components/Calm/Calmsongs';
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
                    <Route path ="/Music" element ={<Music/>}> </Route>
                    <Route path ="/Meditation" element ={<Meditation/>}> </Route>
                    <Route path ="/Contact" element ={<Contact/>}> </Route>
+                   <Route path ="/Popup" element ={<Popup/>}> </Route>
+                   <Route path ="/Videos" element ={<Videos/>}> </Route>
+                   <Route path ="/Calmsongs" element ={<Calmsongs/>}> </Route>
              </Routes>
           </BrowserRouter>
       </div>

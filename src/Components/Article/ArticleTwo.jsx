@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Card component
+
 const Card = ({ title, description }) => (
   <div className="p-6 mb-8 bg-white rounded-lg shadow-md">
     <h3 className="mb-2 text-xl font-semibold text-gray-800">{title}</h3>
@@ -8,7 +8,7 @@ const Card = ({ title, description }) => (
   </div>
 );
 
-// FAQItem component
+
 const FAQItem = ({ question, answer }) => {
   const [isOpen, setIsOpen] = React.useState(false);
 

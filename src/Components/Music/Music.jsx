@@ -1,14 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react';
 import Navbar from '../NavBar/nav';
-import Videos from '../Videos/Videos';
 import axios from 'axios';
 import Footer from '../Footer/Footer';
 
 const Music = () => {
   const videoRef = useRef(null);
   const [cameraOn, setCameraOn] = useState(false);
-  const [capturedImages, setCapturedImages] = useState([]);
-  const [emotion, setEmotion]=useState('')
+  const [emotion, setEmotion] = useState('');
+  const [currentSong, setCurrentSong] = useState('');
+  const [currentVideo, setCurrentVideo] = useState('');
 
   useEffect(() => {
     let intervalId;
@@ -16,7 +16,7 @@ const Music = () => {
     if (cameraOn) {
       intervalId = setInterval(() => {
         captureImage();
-      }, 10000); 
+      }, 10000);
     }
 
     return () => {
@@ -48,8 +48,6 @@ const Music = () => {
     setCameraOn(false);
   };
 
-
-
   const captureImage = () => {
     const canvas = document.createElement('canvas');
     canvas.width = videoRef.current.videoWidth;
@@ -57,33 +55,54 @@ const Music = () => {
     const ctx = canvas.getContext('2d');
     ctx.drawImage(videoRef.current, 0, 0, canvas.width, canvas.height);
 
-   
     canvas.toBlob((blob) => {
-       
-        const file = new File([blob], 'image.png', { type: 'image/png' });
-        
-    
-       
-        predictEmotion(file);
-    }, 'image/png');
-};
+      const file = new File([blob], 'image.png', { type: 'image/png' });
 
+      predictEmotion(file);
+    }, 'image/png');
+  };
 
   const predictEmotion = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
-  
+
     try {
       const response = await axios.post('http://localhost:8002/predict_emotion', formData);
       console.log(response.data.predicted_emotion);
-      setEmotion(response.data.predicted_emotion)
+      setEmotion(response.data.predicted_emotion);
+
+      // Load and play media based on predicted emotion
+      switch (response.data.predicted_emotion) {
+        case 'happy':
+          loadMedia('https://www.youtube.com/embed/mgSRJyhzlOY?si=dNqTBjcTEVgEbIw7', 'https://www.youtube.com/embed/mgSRJyhzlOY?si=dNqTBjcTEVgEbIw7');
+          break;
+        case 'sad':
+          loadMedia('https://www.youtube.com/embed/pPH2zrX4-iQ?si=ilfW_Zj03o6YNbsZ', 'https://www.youtube.com/embed/pPH2zrX4-iQ?si=ilfW_Zj03o6YNbsZ');
+          break;
+        case 'angry':
+          loadMedia('https://www.youtube.com/embed/pPH2zrX4-iQ?si=ilfW_Zj03o6YNbsZ', 'https://www.youtube.com/embed/pPH2zrX4-iQ?si=ilfW_Zj03o6YNbsZ');
+          break;
+        default:
+          console.log('No emotion detected.');
+      }
     } catch (error) {
       console.error('Error:', error);
     }
   };
 
+  const loadMedia = (songPath, videoLink) => {
+    setCurrentSong(songPath);
+    setCurrentVideo(videoLink);
+    playMedia(songPath);
+  };
+
+  const playMedia = (mediaPath) => {
+    const media = new Audio(mediaPath);
+    media.play();
+  };
+
   return (
-    <div className="w-full p-10" style={{  background: 'linear-gradient(135deg, #FFB6C1, #FFDAB9)'}}>
+    <div className="w-full p-10" style={{ background: 'linear-gradient(120deg, #4681A0, #fffff0)' }}>
       <Navbar />
       <div className="flex flex-col items-center justify-center w-full">
         <h1 className="p-8 mt-4 text-4xl font-semibold text-gray-800">
@@ -112,17 +131,26 @@ const Music = () => {
       <div className='flex justify-center w-full'>
         Your Emotion : {emotion}
       </div>
-      <div className="flex flex-wrap justify-center mt-8">
-        {capturedImages.map((image, index) => (
-          <div key={index} className="m-2">
-            <img src={image} alt={`Captured ${index}`} className="object-cover w-40 h-40 rounded-lg" />
+      
+      <div className="flex justify-center w-full">
+        {currentVideo && (
+          <div className="p-4 m-4 bg-gray-200 rounded-lg">
+            
+            <div className="aspect-w-16 aspect-h-9">
+              <iframe
+                title="YouTube Video"
+                width="560"
+                height="315"
+                src={currentVideo}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="rounded-lg"
+              ></iframe>
+            </div>
           </div>
-        ))}
+        )}
       </div>
-      <div className="p-10">
-        <Videos />
-      </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 };
